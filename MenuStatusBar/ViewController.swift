@@ -11,16 +11,22 @@ class ViewController: NSViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
+    view.wantsLayer = true
+    view.layer?.backgroundColor = .white
+    
+    let label = NSTextField()
+    view.addSubview(label)
+    label.stringValue = "Hai"
+    label.isEditable = false
+    label.textColor = .black
+    label.translatesAutoresizingMaskIntoConstraints = false
+    
+    NSLayoutConstraint.activate([
+      label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+    ])
+    
   }
-
-  override var representedObject: Any? {
-    didSet {
-    // Update the view, if already loaded.
-    }
-  }
-
 
 }
 
