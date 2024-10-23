@@ -62,21 +62,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // Hide Items
     let hideClimbrItem = NSMenuItem(
       title: "Hide \(ProcessInfo.processInfo.processName)",
-      action: nil,
+      action: #selector(hideApp),
       keyEquivalent: ""
     )
     appMenu.addItem(hideClimbrItem)
     
     let hideOthersItem = NSMenuItem(
       title: "Hide Others",
-      action: nil,
+      action: #selector(hideOthers),
       keyEquivalent: ""
     )
     appMenu.addItem(hideOthersItem)
     
     let showAllItem = NSMenuItem(
       title: "Show All",
-      action: nil,
+      action: #selector(showAll),
       keyEquivalent: ""
     )
     appMenu.addItem(showAllItem)
@@ -92,6 +92,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     appMenu.addItem(quitItem)
     
     mainMenu.items.first?.submenu = appMenu
+  }
+  
+  private var isCurrentWindowVisible: Bool {
+    let window = NSApplication.shared.mainWindow
+    
+    return window?.isVisible ?? true
+  }
+  
+  @objc private func hideApp(sender: Any?) {
+    NSApplication.shared.hide(sender)
+  }
+  
+  @objc private func hideOthers(sender: Any?) {
+    let process = ProcessInfo.processInfo.processIdentifier
+    for app in NSWorkspace.shared.runningApplications where app.processIdentifier != process {
+      app.hide()
+    }
+  }
+  
+  @objc private func showAll(sender: Any?) {
+    
+    for app in NSWorkspace.shared.runningApplications {
+      app.unhide()
+    }
   }
   
   @objc private func quitApp(sender: Any?) {
