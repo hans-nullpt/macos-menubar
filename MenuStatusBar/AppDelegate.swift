@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     mainWindow = MainWindow()
     
     createAppMenuBar()
+    createWindowsMenuBar()
     
     mainWindow?.makeKeyAndOrderFront(nil)
   }
@@ -91,7 +92,68 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     )
     appMenu.addItem(quitItem)
     
-    mainMenu.items.first?.submenu = appMenu
+    if let mainMenuItem = mainMenu.items.first {
+      mainMenu.setSubmenu(appMenu, for: mainMenuItem)
+    }
+  }
+  
+  internal func createWindowsMenuBar() {
+    let mainMenu = NSApplication.shared.mainMenu
+    
+    guard let mainMenu else { return }
+    
+    let windowsMenu = NSMenu()
+    let windowsMenuItem = NSMenuItem(
+      title: "Windows",
+      action: nil,
+      keyEquivalent: ""
+    )
+    
+    // Minimze Item
+    let minimizeItem = NSMenuItem(
+      title: "Minimize",
+      action: #selector(minimizeApp),
+      keyEquivalent: ""
+    )
+    windowsMenu.addItem(minimizeItem)
+    
+    // Zoom Item
+    let zoomItem = NSMenuItem(
+      title: "Zoom",
+      action: #selector(zoomApp),
+      keyEquivalent: ""
+    )
+    windowsMenu.addItem(zoomItem)
+    
+    // Fill Item
+    let fillItem = NSMenuItem(
+      title: "Fill",
+      action: nil,
+      keyEquivalent: ""
+    )
+    windowsMenu.addItem(fillItem)
+    
+    // Center Item
+    let centerItem = NSMenuItem(
+      title: "Center",
+      action: #selector(centerApp),
+      keyEquivalent: ""
+    )
+    windowsMenu.addItem(centerItem)
+    
+    windowsMenu.addItem(NSMenuItem.separator())
+    
+    // FullScreen Item
+    let fullScreenitem = NSMenuItem(
+      title: "Full Screen",
+      action: #selector(fullScreenApp),
+      keyEquivalent: ""
+    )
+    windowsMenu.addItem(fullScreenitem)
+    
+    mainMenu.addItem(windowsMenuItem)
+    mainMenu.setSubmenu(windowsMenu, for: windowsMenuItem)
+    
   }
   
   private var isCurrentWindowVisible: Bool {
@@ -120,6 +182,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   @objc private func quitApp(sender: Any?) {
     NSApplication.shared.terminate(sender)
+  }
+  
+  @objc private func minimizeApp(sender: Any?) {
+    mainWindow?.miniaturize(sender)
+  }
+  
+  @objc private func zoomApp(sender: Any?) {
+    mainWindow?.zoom(sender)
+  }
+  
+  @objc private func centerApp(sender: Any?) {
+    mainWindow?.centerSelectionInVisibleArea(sender)
+  }
+  
+  @objc private func fullScreenApp(sender: Any?) {
+    mainWindow?.toggleFullScreen(sender)
   }
   
   
