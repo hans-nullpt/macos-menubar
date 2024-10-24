@@ -46,17 +46,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     statusBarPopOver = NSPopover()
+    // Set the popover size
     statusBarPopOver?.contentSize = NSSize(width: 300, height: 300)
-    statusBarPopOver?.behavior = .applicationDefined
+    // Set the popover behavior to close automatically if user click outside
+    statusBarPopOver?.behavior = .transient
+    // Set the UIViewController of popover
     statusBarPopOver?.contentViewController = ViewController()
     
   }
   
   @objc internal func openMenuBarApp(_ sender: Any?) {
     if let button = statusBarItem?.button {
+      // Close the popover if is shown
       if let popOver = statusBarPopOver, popOver.isShown {
         statusBarPopOver?.performClose(sender)
       } else {
+        // Otherwise show popover relative to button/icon location
         statusBarPopOver?.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
       }
     }
