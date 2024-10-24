@@ -14,6 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // Hold the status bar reference, make sure it's not released
   var statusBar: NSStatusBar?
   var statusBarItem: NSStatusItem?
+  var statusBarPopOver: NSPopover?
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     mainWindow = MainWindow()
@@ -43,10 +44,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       button.target = self
       button.action = #selector(openMenuBarApp)
     }
+    
+    statusBarPopOver = NSPopover()
+    statusBarPopOver?.contentSize = NSSize(width: 300, height: 300)
+    statusBarPopOver?.behavior = .applicationDefined
+    statusBarPopOver?.contentViewController = ViewController()
+    
   }
   
   @objc internal func openMenuBarApp(_ sender: Any?) {
-    print("openMenuBarApp")
+    if let button = statusBarItem?.button {
+      if let popOver = statusBarPopOver, popOver.isShown {
+        statusBarPopOver?.performClose(sender)
+      } else {
+        statusBarPopOver?.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+      }
+    }
   }
   
   internal func createAppMenuBar() {
