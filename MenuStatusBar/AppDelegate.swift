@@ -11,9 +11,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   var mainWindow: NSWindow?
   
+  // Hold the status bar reference, make sure it's not released
+  var statusBar: NSStatusBar?
+  var statusBarItem: NSStatusItem?
+  
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     mainWindow = MainWindow()
-    
+    createStatusBar()
     createAppMenuBar()
     createWindowsMenuBar()
     
@@ -26,6 +30,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
     return true
+  }
+  
+  internal func createStatusBar() {
+    statusBar = NSStatusBar.system
+    statusBarItem = statusBar?.statusItem(withLength: NSStatusItem.variableLength)
+    
+    if let button = statusBarItem?.button {
+      let icon = NSImage(systemSymbolName: "figure.cooldown", accessibilityDescription: "cooldown")
+      
+      button.image = icon
+      button.target = self
+      button.action = #selector(openMenuBarApp)
+    }
+  }
+  
+  @objc internal func openMenuBarApp(_ sender: Any?) {
+    print("openMenuBarApp")
   }
   
   internal func createAppMenuBar() {
