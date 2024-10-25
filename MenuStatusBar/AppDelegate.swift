@@ -243,16 +243,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 class MainWindow: NSWindow {
+  
+  let frameSize = NSRect(x: 0, y: 0, width: 1200, height: 840)
+  
   init() {
     /// Init the main window with following parameters:
     super.init(
-      contentRect: NSRect(x: 0, y: 0, width: 1200, height: 840),
+      contentRect: frameSize,
       styleMask: [
-        .titled, .closable, .miniaturizable, .fullSizeContentView
+        .titled, .closable, .miniaturizable, .resizable, .borderless, .fullSizeContentView
       ],
       backing: .buffered,
       defer: false
     )
+    
+    titlebarSeparatorStyle = .none
+    
+    minSize = NSSize(width: frameSize.size.width, height: frameSize.size.height)
     
     /// Set the title bar to transparent
     titlebarAppearsTransparent = true
